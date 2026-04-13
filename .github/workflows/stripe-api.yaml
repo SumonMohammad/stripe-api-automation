@@ -16,12 +16,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: npm
+
+      - name: Cache npm global packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-global-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-global-
 
       - name: Install Newman
         run: npm install -g newman
 
       - name: Create Environment File from Secrets
         run: |
+          mkdir -p environment
           cat > environment/stripe-env.json << 'EOF'
           {
             "id": "827e603e-2194-4b7e-8a4f-df2c08f58ccb",
