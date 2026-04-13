@@ -1,0 +1,86 @@
+name: Stripe API Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  api-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Create Environment File from Secrets
+        run: |
+          cat > environment/stripe-env.json << 'EOF'
+          {
+            "id": "827e603e-2194-4b7e-8a4f-df2c08f58ccb",
+            "name": "StripeENV",
+            "values": [
+              {
+                "key": "baseURL",
+                "value": "https://api.stripe.com/v1",
+                "type": "default",
+                "enabled": true
+              },
+              {
+                "key": "stripe_secret",
+                "value": "${{ secrets.STRIPE_API_SECRET }}",
+                "type": "secret",
+                "enabled": true
+              },
+              {
+                "key": "customerId",
+                "value": "",
+                "type": "any",
+                "enabled": true
+              },
+              {
+                "key": "paymentMethodId",
+                "value": "",
+                "type": "any",
+                "enabled": true
+              },
+              {
+                "key": "IntendID",
+                "value": "",
+                "type": "any",
+                "enabled": true
+              },
+              {
+                "key": "setupIntentId",
+                "value": "",
+                "type": "any",
+                "enabled": true
+              },
+              {
+                "key": "chargeId",
+                "value": "",
+                "type": "any",
+                "enabled": true
+              },
+              {
+                "key": "refundId",
+                "value": "",
+                "type": "any",
+                "enabled": true
+              }
+            ],
+            "_postman_variable_scope": "environment"
+          }
+          EOF
+
+      - name: Run API tests
+        run: |
+          newman run collection/stripe-collection.json \
+          -e environment/stripe-env.json

@@ -1,0 +1,786 @@
+{
+  "info": {
+    "_postman_id": "e8fede53-540a-4171-920c-135795ac5b5e",
+    "name": "StripeNewmanCollection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31520684"
+  },
+  "item": [
+    {
+      "name": "CreateCustomer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const CustomerId = pm.response.json().id; // Extract the customer ID from the response\r",
+              "\r",
+              "pm.environment.set(\"customerId\", CustomerId); // Set the customer ID as an environment variable"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "name",
+              "value": "Leonel Messi"
+            },
+            {
+              "type": "text",
+              "key": "email",
+              "value": "sumon@gmail.com"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api.stripe.com/v1/customers",
+          "protocol": "https",
+          "host": [
+            "api",
+            "stripe",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "customers"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/customers \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d name=\"Jenny Rosen\" \\\r\n  --data-urlencode email=\"jennyrosen@example.com\""
+      },
+      "response": []
+    },
+    {
+      "name": "CreatePaymentMethods",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const jsonData = pm.response.json()\r",
+              "\r",
+              "const PaymentMethodId = jsonData.id\r",
+              "pm.environment.set(\"paymentMethodId\", PaymentMethodId)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "type",
+              "value": "us_bank_account"
+            },
+            {
+              "type": "text",
+              "key": "us_bank_account[account_holder_type]",
+              "value": "individual"
+            },
+            {
+              "type": "text",
+              "key": "us_bank_account[account_number]",
+              "value": "000123456789"
+            },
+            {
+              "type": "text",
+              "key": "us_bank_account[routing_number]",
+              "value": "110000000"
+            },
+            {
+              "type": "text",
+              "key": "billing_details[name]",
+              "value": "Sumon Mohammad"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api.stripe.com/v1/payment_methods",
+          "protocol": "https",
+          "host": [
+            "api",
+            "stripe",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "payment_methods"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/payment_methods \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d type=us_bank_account \\\r\n  -d \"us_bank_account[account_holder_type]\"=individual \\\r\n  -d \"us_bank_account[account_number]\"=000123456789 \\\r\n  -d \"us_bank_account[routing_number]\"=110000000 \\\r\n  -d \"billing_details[name]\"=\"John Doe\""
+      },
+      "response": []
+    },
+    {
+      "name": "CreateSetupIntents",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseBody = pm.response.json();\r",
+              "\r",
+              "const setupIntentId = responseBody.id;\r",
+              "const clientSecret = responseBody.client_secret;\r",
+              "pm.environment.set(\"IntendID\", setupIntentId);\r",
+              "\r",
+              "console.log(setupIntentId)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "payment_method_types[]",
+              "value": "us_bank_account"
+            },
+            {
+              "key": "customer",
+              "value": "{{customerId}}",
+              "type": "text",
+              "uuid": "f05b9ddf-203b-4952-b8d0-c2721ed9b996"
+            },
+            {
+              "key": "confirm ",
+              "value": "true",
+              "type": "text",
+              "uuid": "663909a3-8038-4c2d-a6b9-eb56bd18750f",
+              "disabled": true
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/setup_intents",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "setup_intents"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/setup_intents \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d \"payment_method_types[]\"=card"
+      },
+      "response": []
+    },
+    {
+      "name": "confirmSetupIntents",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "const setupIntentId = jsonData.id;\r",
+              "\r",
+              "pm.environment.set(\"setupIntentId\", setupIntentId);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "payment_method",
+              "value": "{{paymentMethodId}}"
+            },
+            {
+              "key": "mandate_data[customer_acceptance][type]",
+              "value": "online",
+              "type": "text",
+              "uuid": "a7e6c27c-5d94-48dd-bb76-0f313f2327a7"
+            },
+            {
+              "key": "mandate_data[customer_acceptance][online][ip_address]",
+              "value": "127.0.0.1",
+              "type": "text",
+              "uuid": "e2d9ed82-3ead-4462-8728-6bb947f40200"
+            },
+            {
+              "key": "mandate_data[customer_acceptance][online][user_agent]",
+              "value": "test-agent",
+              "type": "text",
+              "uuid": "5c994483-7d29-4eda-a034-06e44a468fdc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/setup_intents/{{IntendID}}/confirm",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "setup_intents",
+            "{{IntendID}}",
+            "confirm"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/setup_intents/seti_1Mm2cBLkdIwHu7ixaiKW3ElR/confirm \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d payment_method=pm_card_visa"
+      },
+      "response": []
+    },
+    {
+      "name": "verifyMicroDeposits",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "amounts[]",
+              "value": "32"
+            },
+            {
+              "type": "text",
+              "key": "amounts[]",
+              "value": "45"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/setup_intents/{{setupIntentId}}/verify_microdeposits",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "setup_intents",
+            "{{setupIntentId}}",
+            "verify_microdeposits"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/setup_intents/seti_1Mm5yZLkdIwHu7ixm0sPzrx4/verify_microdeposits \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d \"amounts[]\"=32 \\\r\n  -d \"amounts[]\"=45"
+      },
+      "response": []
+    },
+    {
+      "name": "CreatePaymentIntent",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "",
+              "const jsonData = pm.response.json();",
+              "",
+              "// 1. Status Code",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Headers Authorization",
+              "pm.test(\"Response has Content-Type: application/json\", function () {",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+              "});",
+              "",
+              "pm.test(\"Request was authenticated (not 401 or 403)\", function () {",
+              "    pm.expect(pm.response.code).to.not.equal(401);",
+              "    pm.expect(pm.response.code).to.not.equal(403);",
+              "});",
+              "pm.environment.set(\"chargeId\", jsonData.latest_charge);",
+              "",
+              "// 3. Schema Validation",
+              "pm.test(\"Response matches Payment Intent JSON schema\", function () {",
+              "    const schema = {",
+              "        type: \"object\",",
+              "        required: [",
+              "            \"id\", \"object\", \"amount\", \"amount_capturable\", \"amount_received\",",
+              "            \"capture_method\", \"client_secret\", \"confirmation_method\", \"created\",",
+              "            \"currency\", \"customer\", \"latest_charge\", \"livemode\", \"metadata\",",
+              "            \"payment_method\", \"payment_method_options\", \"payment_method_types\", \"status\"",
+              "        ],",
+              "        properties: {",
+              "            id: { type: \"string\" },",
+              "            object: { type: \"string\" },",
+              "            amount: { type: \"number\" },",
+              "            amount_capturable: { type: \"number\" },",
+              "            amount_received: { type: \"number\" },",
+              "            capture_method: { type: \"string\" },",
+              "            client_secret: { type: \"string\" },",
+              "            confirmation_method: { type: \"string\" },",
+              "            created: { type: \"number\" },",
+              "            currency: { type: \"string\" },",
+              "            customer: { type: \"string\" },",
+              "            latest_charge: { type: \"string\" },",
+              "            livemode: { type: \"boolean\" },",
+              "            metadata: { type: \"object\" },",
+              "            payment_method: { type: \"string\" },",
+              "            payment_method_types: { type: \"array\", items: { type: \"string\" } },",
+              "            status: { type: \"string\" },",
+              "            payment_method_options: {",
+              "                type: \"object\",",
+              "                properties: {",
+              "                    us_bank_account: {",
+              "                        type: \"object\",",
+              "                        required: [\"verification_method\", \"transaction_purpose\"],",
+              "                        properties: {",
+              "                            verification_method: { type: \"string\" },",
+              "                            transaction_purpose: { type: \"string\" }",
+              "                        }",
+              "                    }",
+              "                }",
+              "            }",
+              "        }",
+              "    };",
+              "    pm.expect(jsonData).to.have.jsonSchema(schema);",
+              "});",
+              "",
+              "// 4. Essential Property Validations",
+              "",
+              "pm.test(\"id exists and starts with 'pi_'\", function () {",
+              "    pm.expect(jsonData.id).to.be.a(\"string\");",
+              "    pm.expect(jsonData.id).to.match(/^pi_/);",
+              "});",
+              "",
+              "pm.test(\"object equals 'payment_intent'\", function () {",
+              "    pm.expect(jsonData.object).to.equal(\"payment_intent\");",
+              "});",
+              "",
+              "pm.test(\"amount is a number and equals 2000\", function () {",
+              "    pm.expect(jsonData.amount).to.be.a(\"number\");",
+              "    pm.expect(jsonData.amount).to.equal(2000);",
+              "});",
+              "",
+              "pm.test(\"currency equals 'usd'\", function () {",
+              "    pm.expect(jsonData.currency).to.equal(\"usd\");",
+              "});",
+              "",
+              "pm.test(\"status exists and is a valid Payment Intent status\", function () {",
+              "    const validStatuses = [",
+              "        \"requires_payment_method\",",
+              "        \"requires_confirmation\",",
+              "        \"requires_action\",",
+              "        \"processing\",",
+              "        \"requires_capture\",",
+              "        \"canceled\",",
+              "        \"succeeded\"",
+              "    ];",
+              "    pm.expect(jsonData.status).to.be.a(\"string\");",
+              "    pm.expect(validStatuses).to.include(jsonData.status);",
+              "});",
+              "",
+              "pm.test(\"client_secret exists and is a non-empty string\", function () {",
+              "    pm.expect(jsonData.client_secret).to.be.a(\"string\").and.to.have.length.above(0);",
+              "});",
+              "",
+              "pm.test(\"payment_method_types is an array and contains 'us_bank_account'\", function () {",
+              "    pm.expect(jsonData.payment_method_types).to.be.an(\"array\");",
+              "    pm.expect(jsonData.payment_method_types).to.include(\"us_bank_account\");",
+              "});",
+              "",
+              "pm.test(\"customer exists and starts with 'cus_'\", function () {",
+              "    pm.expect(jsonData.customer).to.be.a(\"string\");",
+              "    pm.expect(jsonData.customer).to.match(/^cus_/);",
+              "});",
+              "",
+              "pm.test(\"payment_method exists and starts with 'pm_'\", function () {",
+              "    pm.expect(jsonData.payment_method).to.be.a(\"string\");",
+              "    pm.expect(jsonData.payment_method).to.match(/^pm_/);",
+              "});",
+              "",
+              "pm.test(\"livemode is a boolean (false for test mode)\", function () {",
+              "    pm.expect(jsonData.livemode).to.be.a(\"boolean\");",
+              "    pm.expect(jsonData.livemode).to.equal(false);",
+              "});",
+              "",
+              "pm.test(\"latest_charge exists\", function () {",
+              "    pm.expect(jsonData.latest_charge).to.exist;",
+              "});",
+              "",
+              "pm.test(\"capture_method equals 'automatic_async'\", function () {",
+              "    pm.expect(jsonData.capture_method).to.equal(\"automatic_async\");",
+              "});",
+              "",
+              "pm.test(\"confirmation_method equals 'automatic'\", function () {",
+              "    pm.expect(jsonData.confirmation_method).to.equal(\"automatic\");",
+              "});",
+              "",
+              "pm.test(\"created is a number (Unix timestamp)\", function () {",
+              "    pm.expect(jsonData.created).to.be.a(\"number\");",
+              "    pm.expect(jsonData.created).to.be.above(0);",
+              "});",
+              "",
+              "pm.test(\"payment_method_options.us_bank_account exists with verification_method and transaction_purpose\", function () {",
+              "    const usBankAccount = jsonData.payment_method_options && jsonData.payment_method_options.us_bank_account;",
+              "    pm.expect(usBankAccount).to.be.an(\"object\");",
+              "    pm.expect(usBankAccount).to.have.property(\"verification_method\");",
+              "    pm.expect(usBankAccount).to.have.property(\"transaction_purpose\");",
+              "});",
+              "",
+              "pm.test(\"amount_received is a number\", function () {",
+              "    pm.expect(jsonData.amount_received).to.be.a(\"number\");",
+              "});",
+              "",
+              "pm.test(\"amount_capturable is a number\", function () {",
+              "    pm.expect(jsonData.amount_capturable).to.be.a(\"number\");",
+              "});",
+              "",
+              "pm.test(\"metadata is an object\", function () {",
+              "    pm.expect(jsonData.metadata).to.be.an(\"object\");",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "amount",
+              "value": "2000"
+            },
+            {
+              "type": "text",
+              "key": "currency",
+              "value": "usd"
+            },
+            {
+              "key": "payment_method",
+              "value": "{{paymentMethodId}}",
+              "type": "text",
+              "uuid": "a6657268-dda0-4950-a019-dbf251a2bdc9"
+            },
+            {
+              "key": "customer",
+              "value": "{{customerId}}",
+              "type": "text",
+              "uuid": "facb5616-de46-4afc-be5b-d229af60cd6a"
+            },
+            {
+              "key": "payment_method_types[]",
+              "value": "us_bank_account",
+              "type": "text",
+              "uuid": "33c8bb45-576a-4ce9-8e7f-f91b1ee54da3"
+            },
+            {
+              "key": "confirm",
+              "value": "true",
+              "type": "text",
+              "uuid": "b6bce79d-af0f-4253-893c-e93be312f7c5"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api.stripe.com/v1/payment_intents",
+          "protocol": "https",
+          "host": [
+            "api",
+            "stripe",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/payment_intents \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d amount=2000 \\\r\n  -d currency=usd \\\r\n  -d \"automatic_payment_methods[enabled]\"=true"
+      },
+      "response": []
+    },
+    {
+      "name": "ChargeVerification",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "https://api.stripe.com/v1/charges/{{chargeId}}",
+          "protocol": "https",
+          "host": [
+            "api",
+            "stripe",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "charges",
+            "{{chargeId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/payment_intents \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d amount=2000 \\\r\n  -d currency=usd \\\r\n  -d \"automatic_payment_methods[enabled]\"=true"
+      },
+      "response": []
+    },
+    {
+      "name": "RefundPayment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "pm.environment.set(\"refundId\", jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "charge",
+              "value": "{{chargeId}}",
+              "type": "text",
+              "uuid": "8ee996ec-df4f-4079-9005-c56f07003131"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://api.stripe.com/v1/refunds",
+          "protocol": "https",
+          "host": [
+            "api",
+            "stripe",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/payment_intents \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d amount=2000 \\\r\n  -d currency=usd \\\r\n  -d \"automatic_payment_methods[enabled]\"=true"
+      },
+      "response": []
+    },
+    {
+      "name": "RetrieveRefundStatus",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{stripe_secret}}",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "https://api.stripe.com/v1/refunds/{{refundId}}",
+          "protocol": "https",
+          "host": [
+            "api",
+            "stripe",
+            "com"
+          ],
+          "path": [
+            "v1",
+            "refunds",
+            "{{refundId}}"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.stripe.com/v1/payment_intents \\\r\n  -u \"{{stripe_secret}}:\" \\\r\n  -d amount=2000 \\\r\n  -d currency=usd \\\r\n  -d \"automatic_payment_methods[enabled]\"=true"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "paymentIntentId",
+      "value": ""
+    },
+    {
+      "key": "random4Digit",
+      "value": ""
+    }
+  ]
+}
