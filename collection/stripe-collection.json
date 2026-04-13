@@ -13,7 +13,7 @@
           "listen": "test",
           "script": {
             "exec": [
-              "const CustomerId = pm.response.json().id; // Extract the customer ID from the response\r",
+              "let CustomerId = pm.response.json().id; // Extract the customer ID from the response\r",
               "\r",
               "pm.environment.set(\"customerId\", CustomerId); // Set the customer ID as an environment variable"
             ],
@@ -80,9 +80,9 @@
           "listen": "test",
           "script": {
             "exec": [
-              "const jsonData = pm.response.json()\r",
+              "let jsonData = pm.response.json()\r",
               "\r",
-              "const PaymentMethodId = jsonData.id\r",
+              "let PaymentMethodId = jsonData.id\r",
               "pm.environment.set(\"paymentMethodId\", PaymentMethodId)"
             ],
             "type": "text/javascript",
@@ -165,11 +165,10 @@
             "exec": [
               "let responseBody = pm.response.json();\r",
               "\r",
-              "let setupIntentId = responseBody.id;\r",
+              "let SetupIntentId = responseBody.id;\r",
               "let clientSecret = responseBody.client_secret;\r",
-              "pm.environment.set(\"IntendID\", setupIntentId);\r",
-              "\r",
-              "console.log(setupIntentId)"
+              "pm.environment.set(\"IntendID\", SetupIntentId);\r",
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -238,9 +237,9 @@
           "listen": "test",
           "script": {
             "exec": [
-              "const jsonData = pm.response.json();\r",
+              "let jsonData = pm.response.json();\r",
               "\r",
-              "const setupIntentId = jsonData.id;\r",
+              "let setupIntentId = jsonData.id;\r",
               "\r",
               "pm.environment.set(\"setupIntentId\", setupIntentId);"
             ],
@@ -672,7 +671,7 @@
           "script": {
             "exec": [
               "\r",
-              "const jsonData = pm.response.json();\r",
+              "let jsonData = pm.response.json();\r",
               "pm.environment.set(\"refundId\", jsonData.id);"
             ],
             "type": "text/javascript",
