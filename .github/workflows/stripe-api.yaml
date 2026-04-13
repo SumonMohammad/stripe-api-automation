@@ -16,13 +16,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
 
       - name: Cache npm global packages
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-global-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-global-newman
           restore-keys: |
             ${{ runner.os }}-npm-global-
 
