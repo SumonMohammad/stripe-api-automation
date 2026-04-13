@@ -163,7 +163,7 @@
           "listen": "test",
           "script": {
             "exec": [
-              "const responseBody = pm.response.json();\r",
+              "let responseBody = pm.response.json();\r",
               "\r",
               "let setupIntentId = responseBody.id;\r",
               "let clientSecret = responseBody.client_secret;\r",
@@ -380,7 +380,7 @@
           "script": {
             "exec": [
               "",
-              "const jsonData = pm.response.json();",
+              "let jsonData = pm.response.json();",
               "",
               "// 1. Status Code",
               "pm.test(\"Status code is 200\", function () {",
