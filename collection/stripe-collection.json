@@ -165,8 +165,8 @@
             "exec": [
               "const responseBody = pm.response.json();\r",
               "\r",
-              "const setupIntentId = responseBody.id;\r",
-              "const clientSecret = responseBody.client_secret;\r",
+              "let setupIntentId = responseBody.id;\r",
+              "let clientSecret = responseBody.client_secret;\r",
               "pm.environment.set(\"IntendID\", setupIntentId);\r",
               "\r",
               "console.log(setupIntentId)"

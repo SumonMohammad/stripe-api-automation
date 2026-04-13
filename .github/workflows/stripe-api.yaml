@@ -83,13 +83,39 @@ jobs:
                 "value": "",
                 "type": "any",
                 "enabled": true
+              },
+              {
+                "key": "paymentId",
+                "value": "",
+                "type": "any",
+                "enabled": true
               }
             ],
             "_postman_variable_scope": "environment"
           }
           EOF
+          echo " Environment file created"
+          cat environment/stripe-env.json
+
+      - name: Verify Secret is Loaded
+        run: |
+          if grep -q '"value": "${{ secrets.STRIPE_API_SECRET }}"' environment/stripe-env.json; then
+            echo " Secret placeholder detected (will be replaced at runtime)"
+          else
+            echo "Secret not found in environment file"
+            exit 1
+          fi
 
       - name: Run API tests
         run: |
           newman run collection/stripe-collection.json \
-          -e environment/stripe-env.json
+          -e environment/stripe-env.json \
+          --reporters cli,json \
+          --reporter-json-export results.json
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-results
+          path: results.json
