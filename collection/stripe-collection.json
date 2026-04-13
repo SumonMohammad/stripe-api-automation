@@ -163,11 +163,9 @@
           "listen": "test",
           "script": {
             "exec": [
-              "let responseBody = pm.response.json();\r",
-              "\r",
-              "let SetupIntentId = responseBody.id;\r",
-              "let clientSecret = responseBody.client_secret;\r",
-              "pm.environment.set(\"IntendID\", SetupIntentId);\r",
+              "const setupIntentResponse = pm.response.json();\r",
+              "const setupIntentId = setupIntentResponse.id;\r",
+              "pm.environment.set(\"IntendID\", setupIntentId);\r",
               ""
             ],
             "type": "text/javascript",
